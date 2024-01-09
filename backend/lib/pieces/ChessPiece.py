@@ -2,11 +2,10 @@ from abc import ABC, abstractmethod
 
 
 class ChessPiece(ABC):
-    def __init__(self, position, color):
+    def __init__(self, position):
         self._position = position
-        self._color = color
-        self._valid_moves = []
-
+        self.is_capturable = True
+        
     @property
     def position(self):
         '''Position of the piece on the chessboard represented by a coordinate tuple (int, int)'''
@@ -27,6 +26,8 @@ class ChessPiece(ABC):
     @property
     def piece_color(self):
         '''Color of the chess piece. Either "w" for white, or "b" for black.'''
+        if hasattr(self, '_color'):
+            return self._color
         return self._color
 
     @piece_color.setter
@@ -39,20 +40,7 @@ class ChessPiece(ABC):
                 "Piece color must be a string of either white || black")
         self._piece_color = value[0]
 
-    @property
-    def valid_moves(self) -> list:
-        '''A list of valid moves the piece can make from its current position'''
-        return self._valid_moves
-
     @abstractmethod
-    def update_valid_moves(self, board_state: list[list]):
+    def get_valid_moves(self, game_board:list[list]) ->list[tuple]:
+        '''Returns a list of tuples containing valid moves the piece can make '''
         pass
-
-    @abstractmethod
-    def move(self, position: tuple):
-        pass
-
-
-# Testing Only
-if __name__ == "__main__":
-    pass

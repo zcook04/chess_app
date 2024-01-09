@@ -5,12 +5,25 @@ else:
 
 
 class Queen(ChessPiece):
-    def __init__(self, position: tuple, color: str):
-        super().__init__(position, color)
+    def __init__(self, position: tuple):
+        super().__init__(position)
         self.name = 'queen'
 
-    def move(self, position):
-        print(f"Moving to {position}")
-
-    def update_valid_moves(self):
+   
+class WhiteQueen(Queen):
+    def __init__(self, position: tuple):
+        super().__init__(position)
+        self.color = 'white'
+        
+    def get_valid_moves(self, game_board: list[list]) -> list[tuple]:
+        row, col = self.position
+        return []
+    
+class BlackQueen(Queen):
+    def __init__(self, position: tuple):
+        super().__init__(position)
+        self.color = 'black'
+        
+    def get_valid_moves(self, game_board: list[list]) -> list[tuple]:
+        row, col = self.position
         return []
