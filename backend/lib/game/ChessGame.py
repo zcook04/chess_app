@@ -1,5 +1,6 @@
 import sys
 import os
+import uuid
 
 ## Temp for testing.
 sys.path.append(os.path.abspath(os.path.join(
@@ -26,7 +27,7 @@ class ChessGame:
         self.board = self.initialize_board()
         self.coordinates = self.initialize_coordinates()
         self.initialize_pieces()
-        self.moves = []
+        self.id = uuid.uuid4()
 
     def initialize_board(self) -> list[list]:
         '''Returns a chessboard represented by a list of lists with
@@ -90,7 +91,6 @@ class ChessGame:
         piece exists at the starting square and is a legal move.'''
         piece_to_move = self.occupying_piece(starting_square)
         piece_at_destination = self.occupying_piece(ending_square)
-
         if not piece_to_move:
             return
         if piece_at_destination is None:
@@ -104,8 +104,8 @@ class ChessGame:
             self.remove_piece(starting_square)
             self.place_piece(piece_to_move, ending_square)
         
-        
-game = ChessGame()
-
-game.move_piece('a2', 'a7')
-print(game.occupying_piece('a7').color)
+if __name__ == '__main__':
+    game = ChessGame()
+    game.move_piece('a2', 'a4')
+    print(game.occupying_piece('a4'))
+    print(game.board)

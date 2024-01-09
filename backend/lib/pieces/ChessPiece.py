@@ -1,10 +1,20 @@
 from abc import ABC, abstractmethod
+import json
 
 
 class ChessPiece(ABC):
     def __init__(self, position):
         self._position = position
         self.is_capturable = True
+        self.name = ""
+        
+    def __repr__(self):
+        return json.dumps({
+            'position': self.position,
+            'is_capturable': self.is_capturable,
+            'name': self.name,
+            'color': self.color,
+        })
         
     @property
     def position(self):
