@@ -5,8 +5,9 @@ else:
 
 
 class Bishop(ChessPiece):
-    def __init__(self):
-        pass
+    def __init__(self, position: tuple, color: str):
+        super().__init__(position, color)
+        self.name = 'bishop'
 
     def move(self, position):
         print(f"Moving to {position}")

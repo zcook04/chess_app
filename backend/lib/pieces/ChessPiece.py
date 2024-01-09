@@ -8,20 +8,20 @@ class ChessPiece(ABC):
         self._valid_moves = []
 
     @property
-    def current_position(self):
+    def position(self):
         '''Position of the piece on the chessboard represented by a coordinate tuple (int, int)'''
-        if hasattr(self, '_current_position'):
-            return self._current_position
+        if hasattr(self, '_position'):
+            return self._position
 
-    @current_position.setter
-    def current_position(self, value: tuple) -> tuple:
+    @position.setter
+    def position(self, value: tuple) -> tuple:
         if not self.valid_position():
             return tuple()
         self.update_valid_moves()
-        self._current_position = value
+        self._position = value
 
-    @current_position.deleter
-    def current_position(self):
+    @position.deleter
+    def position(self):
         del self._x
 
     @property
