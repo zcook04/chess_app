@@ -21,23 +21,10 @@ from lib.pieces.Queen import BlackQueen
 from lib.pieces.Rook import WhiteRook
 from lib.pieces.Rook import BlackRook
 
-
-
-class ChessGame:
+class Coordinates:
     def __init__(self):
-        self.board = self.initialize_board()
         self.coordinates = self.initialize_coordinates()
-        self.initialize_pieces()
-        self.id = uuid.uuid4()
-        self.game_moves = []
         
-    def __repr__(self):
-        return json.dumps({
-            'uuid': self.id,
-            'game_moves': self.moves,
-            'board': self.board,
-        })
-
     def initialize_coordinates(self) -> dict:
         """Returns a dictionary of each square in chess notation as a
         key with the board coordinates as the value: i.e., a1: (0, 0)
@@ -51,7 +38,37 @@ class ChessGame:
         return {(letter + str(number)): (number-1, ord(letter) - ord('a'))
                 for number in numbers for letter in letters}
 
-    def initialize_board(self) -> list[list]:
+
+class ChessSquare(Coordinates):
+    def __init__(self, location: tuple, piece: ChessPiece|None):
+        super().__init__()
+        self.location = location
+        self.name = ''.join([k for k,v in self.coordinates.items() if v == location])
+        self.piece = piece
+        
+    def __repr__(self):
+        return self.name
+
+
+class ChessGame(Coordinates):
+    def __init__(self):
+        super().__init__()
+        self.id = uuid.uuid4()
+        self.game_moves = []
+        self.board = self.initialize_board()
+        self.initialize_pieces()
+
+        
+    def __repr__(self):
+        return json.dumps({
+            'uuid': self.id,
+            'game_moves': self.moves,
+            'board': self.board,
+        })
+
+
+
+    def initialize_board(self) -> list[list[ChessSquare]]:
         """Returns a chessboard represented by a list of lists with
         None as placeholders for pieces.
 
@@ -59,8 +76,9 @@ class ChessGame:
             list[list]: A list of lists (8x8) containing either None or a ChessPiece
         """
         board = []
-        for _ in range(8):
-            board.append([None for _ in range(8)])
+        for i in range(8):
+            board.append([ChessSquare((i,j),  None) for j in range(8)])
+            
         return board
 
     def place_piece(self, chess_piece: ChessPiece, chess_square: str) -> None:
@@ -70,7 +88,7 @@ class ChessGame:
             chess_piece (ChessPiece): A class inheriting from ChessPiece.
             chess_square (str): chess algebraic notation ie. "a1"
         """
-        self.board[self.coordinates[chess_square][0]][self.coordinates[chess_square][1]] = chess_piece
+        self.board[self.coordinates[chess_square][0]][self.coordinates[chess_square][1]].piece = chess_piece
 
     def initialize_pieces(self) -> None:
         """Place chess pieces on their starting squares."""
@@ -106,7 +124,7 @@ class ChessGame:
         row, column = self.coordinates[chess_square.lower()]
         self.board[row][column] = None
 
-    def occupying_piece(self, chess_square: str) -> ChessPiece | None:
+    def square(self, chess_square: str) -> ChessPiece | None:
         """Returns a ChessPiece if coordinates is occupied otherwise returns None
 
         Args:
@@ -127,17 +145,17 @@ class ChessGame:
             starting_square (str): chess algebreic notation ie. 'a1'
             ending_square (str): chess algebreic notation ie. 'a1'
         """
-        piece_to_move = self.occupying_piece(starting_square)
+        piece_to_move = self.square(starting_square).piece
         if not piece_to_move:
             return
         if piece_to_move.is_legal_move(self.board, self.coordinates[ending_square]):            
             self.remove_piece(ending_square)
             self.remove_piece(starting_square)
             self.place_piece(piece_to_move, ending_square)
+            
 
         
 if __name__ == '__main__':
     from pprint import pprint
     game = ChessGame()
-    print(game.occupying_piece('d1'),  game.occupying_piece('d1').get_valid_moves(game.board))
     pprint(game.board)
