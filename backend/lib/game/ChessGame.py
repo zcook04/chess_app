@@ -39,6 +39,19 @@ class ChessGame:
         })
         
 
+    def initialize_coordinates(self) -> dict:
+        """Returns a dictionary of each square in chess notation as a
+        key with the board coordinates as the value: i.e., a1: (0, 0)
+
+        Returns:
+            dict: chess algebraic notation mapped to board coordinates.
+        """
+        numbers = [x for x in range(1, 9)]
+        letters = [chr(i) for i in range(ord('a'), ord('h')+1)]
+
+        return {(letter + str(number)): (number-1, ord(letter) - ord('a'))
+                for number in numbers for letter in letters}
+
     def initialize_board(self) -> list[list]:
         """Returns a chessboard represented by a list of lists with
         None as placeholders for pieces.
@@ -49,19 +62,21 @@ class ChessGame:
         board = []
         for _ in range(8):
             board.append([None for _ in range(8)])
+
         return board
 
-    def initialize_coordinates(self) -> dict:
-        """Returns a dictionary of each square in chess notation as a
-        key with the board coordinates as the value: i.e., a1: (0, 0)
+    def place_piece(self, chess_piece: ChessPiece, chess_square: str) -> None:
+        """Places a ChessPiece on the chess_square.
 
-        Returns:
-            dict: chess algebriac notation mapped to board coordinates.
+        Args:
+            chess_piece (ChessPiece): A class inheriting from ChessPiece.
+            chess_square (str): chess algebraic notation ie. "a1"
         """
-        numbers = [x for x in range(1, 9)]
-        letters = [chr(i) for i in range(ord('a'), ord('h')+1)]
-        return {(letter + str(number)): (8 - number, ord(letter) - ord('a'))
-                for number in numbers for letter in letters}
+        self.board[self.coordinates[chess_square][0]][self.coordinates[chess_square][1]] = chess_piece
+
+
+
+
 
     def initialize_pieces(self) -> None:
         """Place chess pieces on their starting squares."""
@@ -87,17 +102,9 @@ class ChessGame:
         self.place_piece(BlackKing(self.coordinates['e8']), 'e8')
         self.place_piece(WhiteQueen(self.coordinates['d1']), 'd1')
         self.place_piece(BlackQueen(self.coordinates['d8']), 'd8')
+        # self.place_piece('w', 'a2')
+        # self.place_piece('w', 'a4')
 
-    def place_piece(self, chess_piece: ChessPiece, chess_square: str) -> None:
-        """Places a ChessPiece on the chess_square.
-
-        Args:
-            chess_piece (ChessPiece): A class inheriting from ChessPiece.
-            chess_square (str): chess algebreric notation ie. "a1"
-        """
-        ''''''
-        column, row = self.coordinates[chess_square.lower()]
-        self.board[row][column] = chess_piece
 
     def remove_piece(self, chess_square: str) -> None:
         """Removes a piece from the chessboard.
@@ -105,7 +112,7 @@ class ChessGame:
         Args:
             chess_square (str): chess algebreic notation ie. "a1"
         """
-        column, row = self.coordinates[chess_square.lower()]
+        row, column = self.coordinates[chess_square.lower()]
         self.board[row][column] = None
 
     def occupying_piece(self, chess_square: str) -> ChessPiece | None:
@@ -117,7 +124,7 @@ class ChessGame:
         Returns:
             ChessPiece | None: returns class inheriting from ChessPiece | None.
         """
-        column, row = self.coordinates[chess_square.lower()]
+        row, column = self.coordinates[chess_square.lower()]
         if self.board[row][column]:
             return self.board[row][column]
 
@@ -130,22 +137,16 @@ class ChessGame:
             ending_square (str): chess algebreic notation ie. 'a1'
         """
         piece_to_move = self.occupying_piece(starting_square)
-        piece_at_destination = self.occupying_piece(ending_square)
         if not piece_to_move:
             return
-        if piece_at_destination is None:
-            self.remove_piece(starting_square)
-            self.place_piece(piece_to_move, ending_square)
-            return
-        if piece_at_destination.is_capturable and \
-            piece_at_destination.color != piece_to_move.color and \
-                self.coordinates[ending_square] in piece_to_move.get_valid_moves(self.board):
+        if piece_to_move.is_legal_move(self.board, self.coordinates[ending_square]):            
             self.remove_piece(ending_square)
             self.remove_piece(starting_square)
             self.place_piece(piece_to_move, ending_square)
+
         
 if __name__ == '__main__':
+    from pprint import pprint
     game = ChessGame()
-    game.move_piece('a2', 'a4')
-    print(game.occupying_piece('a4'))
-    print(game.board)
+    print(game.occupying_piece('d1'),  game.occupying_piece('d1').get_valid_moves(game.board))
+    pprint(game.board)
