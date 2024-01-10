@@ -26,10 +26,10 @@ class Knight(ChessPiece):
         valid_moves = []
         for move in knight_moves:
             new_row, new_col = start_row + move[0], start_col + move[1]
-            if is_valid_move(new_row, new_col) and board[new_row][new_col] is None:
+            if is_valid_move(new_row, new_col) and board[new_row][new_col].piece is None:
                 valid_moves.append((new_row, new_col))
-            elif is_valid_move(new_row, new_col) and board[new_row][new_col] is not None:
-                if board[new_row][new_col].is_capturable and board[new_row][new_col].color != self.color:
+            elif is_valid_move(new_row, new_col) and board[new_row][new_col].piece is not None:
+                if board[new_row][new_col].piece.is_capturable and board[new_row][new_col].piece.color != self.color:
                     valid_moves.append((new_row, new_col))
 
         return valid_moves

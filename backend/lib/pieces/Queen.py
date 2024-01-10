@@ -26,9 +26,9 @@ class Queen(ChessPiece):
             for i in range(1, max(len(board), len(board[0]))):  # Max possible distance on the board
                 new_row, new_col = start_row + i * direction[0], start_col + i * direction[1]
                 if is_valid_move(new_row, new_col):
-                    if board[new_row][new_col] is None:
+                    if board[new_row][new_col].piece is None:
                         valid_moves.append((new_row, new_col))
-                    elif board[new_row][new_col].is_capturable and board[new_row][new_col].color != self.color:
+                    elif board[new_row][new_col].piece.is_capturable and board[new_row][new_col].piece.color != self.color:
                         valid_moves.append((new_row, new_col))
                         break  # Stop exploring in this direction after capturing an opponent's piece
                     else:

@@ -30,13 +30,13 @@ class WhitePawn(Pawn):
                 valid_moves.add(( x+1, y ))
         # Can Capture Diag Left One Square
         if x+1 <=7 and y-1 >= 0:
-            occupying_piece = game_board[ x+1 ][ y-1 ]
+            occupying_piece = game_board[ x+1 ][ y-1 ].piece
             if occupying_piece is not None:
                 if occupying_piece.is_capturable:
                     valid_moves.add(( x+1, y-1 ))
         # Can Capture Diag Right One Square
         if x+1 <= 7 and y+1 <= 7:
-            occupying_piece = game_board[x+1][y+1]
+            occupying_piece = game_board[x+1][y+1].piece
             if occupying_piece is not None:
                 if occupying_piece.is_capturable:
                     valid_moves.add(( x+1, y+1 ))

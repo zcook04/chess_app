@@ -23,11 +23,11 @@ class Bishop(ChessPiece):
             valid_moves = []
             for direction in directions:
                 new_row, new_col = row + direction[0], col + direction[1]
-                while is_valid_move(new_row, new_col) and board[new_row][new_col] is None:
+                while is_valid_move(new_row, new_col) and board[new_row][new_col].piece is None:
                     valid_moves.append((new_row, new_col))
                     new_row, new_col = new_row + direction[0], new_col + direction[1]
-                if is_valid_move(new_row, new_col) and board[new_row][new_col] is not None:
-                    if board[new_row][new_col].is_capturable and board[new_row][new_col].color != self.color:
+                if is_valid_move(new_row, new_col) and board[new_row][new_col].piece is not None:
+                    if board[new_row][new_col].piece.is_capturable and board[new_row][new_col].piece.color != self.color:
                         valid_moves.append((new_row, new_col))
             return valid_moves
 

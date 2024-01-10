@@ -66,8 +66,6 @@ class ChessGame(Coordinates):
             'board': self.board,
         })
 
-
-
     def initialize_board(self) -> list[list[ChessSquare]]:
         """Returns a chessboard represented by a list of lists with
         None as placeholders for pieces.
@@ -122,20 +120,7 @@ class ChessGame(Coordinates):
             chess_square (str): chess algebreic notation ie. "a1"
         """
         row, column = self.coordinates[chess_square.lower()]
-        self.board[row][column] = None
-
-    def square(self, chess_square: str) -> ChessPiece | None:
-        """Returns a ChessPiece if coordinates is occupied otherwise returns None
-
-        Args:
-            chess_square (str): chess algebreic notation ie. "a1"
-
-        Returns:
-            ChessPiece | None: returns class inheriting from ChessPiece | None.
-        """
-        row, column = self.coordinates[chess_square.lower()]
-        if self.board[row][column]:
-            return self.board[row][column]
+        self.board[row][column].piece = None
 
     def move_piece(self, starting_square: str, ending_square: str) -> None:
         """Moves a piece from a starting square to ending square if
@@ -145,17 +130,22 @@ class ChessGame(Coordinates):
             starting_square (str): chess algebreic notation ie. 'a1'
             ending_square (str): chess algebreic notation ie. 'a1'
         """
-        piece_to_move = self.square(starting_square).piece
+        piece_to_move = self.board[self.coordinates[starting_square][0]][self.coordinates[starting_square][1]].piece
+
         if not piece_to_move:
             return
         if piece_to_move.is_legal_move(self.board, self.coordinates[ending_square]):            
-            self.remove_piece(ending_square)
             self.remove_piece(starting_square)
             self.place_piece(piece_to_move, ending_square)
+        else:
+            print('not a legal move')
             
 
         
 if __name__ == '__main__':
     from pprint import pprint
     game = ChessGame()
+    game.move_piece('d2', 'd4')
+    game.move_piece('c2', 'c4')
+    game.move_piece('d1', 'a4')
     pprint(game.board)
