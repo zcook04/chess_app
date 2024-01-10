@@ -9,4 +9,4 @@ router = APIRouter()
 async def game_endpoint():
     '''Setups a new game of chess to be played'''
     game = ChessGame()
-    return JSONResponse(content={ "game_start": True, "board": game.board, "uuid": game.id })
+    return { "game_start": True, "game": game, "uuid": game.id }

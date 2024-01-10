@@ -37,7 +37,6 @@ class ChessGame:
             'game_moves': self.moves,
             'board': self.board,
         })
-        
 
     def initialize_coordinates(self) -> dict:
         """Returns a dictionary of each square in chess notation as a
@@ -62,7 +61,6 @@ class ChessGame:
         board = []
         for _ in range(8):
             board.append([None for _ in range(8)])
-
         return board
 
     def place_piece(self, chess_piece: ChessPiece, chess_square: str) -> None:
@@ -73,10 +71,6 @@ class ChessGame:
             chess_square (str): chess algebraic notation ie. "a1"
         """
         self.board[self.coordinates[chess_square][0]][self.coordinates[chess_square][1]] = chess_piece
-
-
-
-
 
     def initialize_pieces(self) -> None:
         """Place chess pieces on their starting squares."""
@@ -102,9 +96,6 @@ class ChessGame:
         self.place_piece(BlackKing(self.coordinates['e8']), 'e8')
         self.place_piece(WhiteQueen(self.coordinates['d1']), 'd1')
         self.place_piece(BlackQueen(self.coordinates['d8']), 'd8')
-        # self.place_piece('w', 'a2')
-        # self.place_piece('w', 'a4')
-
 
     def remove_piece(self, chess_square: str) -> None:
         """Removes a piece from the chessboard.
