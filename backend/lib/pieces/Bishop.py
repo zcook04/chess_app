@@ -27,6 +27,7 @@ class Bishop(ChessPiece):
                     valid_moves.append((new_row, new_col))
                     new_row, new_col = new_row + direction[0], new_col + direction[1]
                 if is_valid_move(new_row, new_col) and board[new_row][new_col].piece is not None:
+                    ## Check if last move is a capturable piece of the other color.
                     if board[new_row][new_col].piece.is_capturable and board[new_row][new_col].piece.color != self.color:
                         valid_moves.append((new_row, new_col))
             return valid_moves
